@@ -1,10 +1,10 @@
 {
-  "name": "PClubMeet",
+  "name": "pclubmeet",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
