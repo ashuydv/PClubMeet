@@ -1,14 +1,21 @@
 const express = require("express");
 const http = require("http");
-const socket = require("socket.io");
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
+const io = require("socket.io")(server, {
+    cors: {
+      origin: '*'
+    }
+});
 const { v4: uuidV4 } = require('uuid')
 const cors = require('cors')
+const { ExpressPeerServer } = require("peer");
 
-const PORT = process.env.PORT || 5000
+const peerServer = ExpressPeerServer(server, {
+    debug: true,
+});
 
+app.use("/peerjs", peerServer);
 app.use(cors())
 app.use(express.json())
 
@@ -16,6 +23,6 @@ app.get('/', (req, res) => {
     res.send("Hello World")
 })
 
-app.listen(PORT, () => {
+server.listen(5000, () => {
     console.log("Server is running...")
 })
