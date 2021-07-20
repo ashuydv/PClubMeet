@@ -1,40 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Card from '@material-ui/core/Card'
 import './Preview.css'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import IconButton from '@material-ui/core/IconButton'
-import CardMedia from '@material-ui/core/CardMedia'
 import { BiMicrophone } from 'react-icons/bi'
 import { IoVideocamOutline } from 'react-icons/io5'
 import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import { IoCopySharp } from 'react-icons/io5'
 import Button from '@material-ui/core/Button'
+import styled from "styled-components";
+
+const Video = styled.video`
+  border: 2px solid #37AF4B;
+  width: 100%;
+  height: 100%;
+`;
 
 
 const Preview = () => {
+    const userVideo = useRef()
+    const [stream, setStream] = useState();
+    useEffect(() => {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+            setStream(stream);
+            if (userVideo.current) {
+                userVideo.current.srcObject = stream;
+            }
+        })
+    }, []);
+    let UserVideo;
+    if (stream) {
+        UserVideo = (
+            <Video playsInline muted ref={userVideo} autoPlay />
+        );
+    }
 
     return (
         <div>
             <div className="preview-main">
-                <h1>Room #1</h1>
-                <Card>
-                    <CardContent>
-                        <CardMedia
-                            component="img"
-                            alt="Contemplative Reptile"
-                            width='350'
-                            height="280"
-                            image='https://dummyimage.com/350x280/37AF4B/333'
-                            title="Contemplative Reptile"
-                        />
+                <h1 className='heading'>Room #1</h1>
+                <Card className='card'>
+                    <CardContent className='video'>
+                        {UserVideo}
                     </CardContent>
                     <CardActions className='card-buttons'>
                         <IconButton size="medium" className='preview-icon'>
                             <BiMicrophone />
                         </IconButton>
-                        <IconButton size="medium" className='preview-icon' >
+                        <IconButton size="medium" className='preview-icon'>
                             <IoVideocamOutline />
                         </IconButton>
                     </CardActions>
