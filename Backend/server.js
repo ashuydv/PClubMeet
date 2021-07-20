@@ -19,9 +19,14 @@ app.use("/peerjs", peerServer);
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res) => {
-    res.send("Hello World")
-})
+app.get('/',newMeeting);
+
+io.on("connection", (socket) => {
+    //console.log("user connected")
+    socket.on("join-room", (roomId, userId) => {
+        socket.join(roomId)
+    })
+} )
 
 server.listen(5000, () => {
     console.log("Server is running...")
