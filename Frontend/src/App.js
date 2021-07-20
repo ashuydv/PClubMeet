@@ -7,9 +7,20 @@ import Meetend from './components/Meetend/Meetend';
 import Meeting from './components/Meeting/Meeting';
 import Preview from './components/Preview/Preview';
 import Home from './components/Home/Home'
+import Axios from 'axios'
 
 
 const App = () => {
+  Axios({
+    method: 'GET',
+    url: "http://localhost:5000/",
+    headers: {
+      "Content-Type" : "application/json"
+    }
+  }).then(res => {
+    console.log(res.data.message)
+  })
+
   return (
     <div>
       <Header/>

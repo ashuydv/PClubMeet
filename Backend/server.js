@@ -4,9 +4,10 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
     cors: {
-      origin: '*'
+        origin: '*'
     }
 });
+
 const { v4: uuidV4 } = require('uuid')
 const cors = require('cors')
 const { ExpressPeerServer } = require("peer");
@@ -25,4 +26,11 @@ app.get('/', (req, res) => {
 
 server.listen(5000, () => {
     console.log("Server is running...")
+})
+
+app.use(cors());
+app.listen(port, () => console.log('Backend Server live on ' + port));
+
+app.get('/', (req, res) => {
+    res.send({ message: 'We did it!' })
 })
