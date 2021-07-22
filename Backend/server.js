@@ -7,10 +7,11 @@ const io = require("socket.io")(server, {
         origin: '*'
     }
 });
-
-const { v4: uuidV4 } = require('uuid')
 const cors = require('cors')
 const { ExpressPeerServer } = require("peer");
+
+//routes
+const newMeeting = require("./routes/newMeeting");
 
 const peerServer = ExpressPeerServer(server, {
     debug: true,
@@ -20,7 +21,11 @@ app.use("/peerjs", peerServer);
 app.use(cors())
 app.use(express.json())
 
-app.get('/',newMeeting);
+//sample
+app.get('/', (req,res) => { res.send("Working....") })
+
+//New Meeting
+app.get('/join', (req, res) =>  { newMeeting.handleNewMeeting(req,res) });
 
 io.on("connection", (socket) => {
     //console.log("user connected")
@@ -31,11 +36,4 @@ io.on("connection", (socket) => {
 
 server.listen(5000, () => {
     console.log("Server is running...")
-})
-
-app.use(cors());
-app.listen(port, () => console.log('Backend Server live on ' + port));
-
-app.get('/', (req, res) => {
-    res.send({ message: 'We did it!' })
 })

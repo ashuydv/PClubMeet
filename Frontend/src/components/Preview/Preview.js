@@ -11,6 +11,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import { IoCopySharp } from 'react-icons/io5'
 import Button from '@material-ui/core/Button'
 import styled from "styled-components";
+import Axios from 'axios';
 
 const Video = styled.video`
   border: 2px solid #37AF4B;
@@ -20,8 +21,11 @@ const Video = styled.video`
 
 
 const Preview = () => {
+    //states & ref's
     const userVideo = useRef()
     const [stream, setStream] = useState();
+
+    //initial mounting
     useEffect(() => {
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             setStream(stream);
@@ -30,12 +34,21 @@ const Preview = () => {
             }
         })
     }, []);
+
+    
     let UserVideo;
     if (stream) {
         UserVideo = (
             <Video playsInline muted ref={userVideo} autoPlay />
         );
     }
+
+    //handle button join
+    const handleJoin = () => {
+        Axios.get('http://localhost:5000/join').then( res => {
+            console.log(res.data)
+        } )
+    } 
 
     return (
         <div>
@@ -69,7 +82,7 @@ const Preview = () => {
                             </InputAdornment>
                         }
                     />
-                    <Button className='btn'>Join Meet</Button>
+                    <Button onClick = {handleJoin} className='btn'>Join Meet</Button>
                 </div>
             </div>
         </div>

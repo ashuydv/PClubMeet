@@ -1,9 +1,9 @@
-const express = require("express");
-const route = express.Router();
 const { v4: uuidV4 } = require("uuid");
 
-route.get("/", (req, res) => {
-    res.redirect(`/${uuidV4()}`);
-});
+const handleNewMeeting = (req, res) => {
+    res.json({ link : uuidV4() })
+}
 
-module.exports = route;
+module.exports = {
+    handleNewMeeting : handleNewMeeting
+}
