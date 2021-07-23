@@ -13,6 +13,9 @@ import Button from '@material-ui/core/Button'
 import styled from "styled-components";
 import Axios from 'axios';
 
+//experimental
+import { useHistory } from 'react-router-dom';
+
 const Video = styled.video`
   border: 2px solid #37AF4B;
   width: 100%;
@@ -24,6 +27,8 @@ const Preview = () => {
     //states & ref's
     const userVideo = useRef()
     const [stream, setStream] = useState();
+
+    const history = useHistory();
 
     //initial mounting
     useEffect(() => {
@@ -46,7 +51,12 @@ const Preview = () => {
     //handle button join
     const handleJoin = () => {
         Axios.get('http://localhost:5000/join').then( res => {
-            console.log(res.data)
+            history.push({
+                pathname : '/meeting',
+                state : {
+                    roomId : res.data.link,
+                }
+            })
         } )
     } 
 
