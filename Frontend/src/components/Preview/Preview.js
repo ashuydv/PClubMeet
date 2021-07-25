@@ -50,11 +50,11 @@ const Preview = () => {
 
     //handle button join
     const handleJoin = () => {
-        Axios.get('http://localhost:5000/join').then( res => {
+        Axios.get('http://localhost:5000/join').then( (response) => {
             history.push({
                 pathname : '/meeting',
                 state : {
-                    roomId : res.data.link,
+                    roomId : response.data.link,
                 }
             })
         } )

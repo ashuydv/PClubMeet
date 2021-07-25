@@ -1,40 +1,50 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import './Meeting.css'
+import socket from 'socket.io-client';
 
-//experimental
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+// const peer = new Peer('', {
+//     host : 'localhost',
+//     port : '5000',
+//     path : '/peerjs'
+// });
 
 const Meeting = () => {
-    const location = useLocation();
 
-    
+    const [Peer, setPeer] = useState();
+    const videoGrid = useRef();
 
-    function addVideoStream(video, stream, videoGrid) {
+    const myVideo = document.createElement('video')
+    myVideo.muted = true
+
+    function addVideoStream(video, stream){
         video.srcObject = stream
         video.addEventListener('loadedmetadata', () => {
             video.play()
         })
-        videoGrid.append(video)
+        videoGrid.current.append(video)
     }
 
     useEffect( () => {
 
-        //video Grid
-        const videoGrid = document.getElementById('video-grid')
+        const fn = async () => {
+            const PeerJs = (await import('peer')).default;
+            setPeer(Peer)
+          }
+        
+        fn()
 
-        //Myvideo
-        const myVideo = document.createElement('video')
-        myVideo.muted = true
+        navigator.mediaDevices.getUserMedia({ video : true, audio : true }).then( stream => {
+            addVideoStream(myVideo, stream);
+        } )
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-            addVideoStream(myVideo,stream,videoGrid)
-        })
-        console.log( location.state.roomId )
-    },[location] )
-
-
+    } , [])
+    
     return (
-        <div id="video-grid"></div>
+
+        <div className = "meeting-main">
+                <div id = "video-grid"  ref = {videoGrid} ></div>
+        </div> 
+         
     );
 }
 

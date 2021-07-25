@@ -1,3 +1,8 @@
+.meeting-main{
+    position: relative;
+    top: 150px;
+}
+
 #video-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, 300px);
