@@ -12,9 +12,8 @@ import { IoCopySharp } from 'react-icons/io5'
 import Button from '@material-ui/core/Button'
 import styled from "styled-components";
 import Axios from 'axios';
-
-//experimental
 import { useHistory } from 'react-router-dom';
+
 
 const Video = styled.video`
   border: 2px solid #37AF4B;
@@ -27,18 +26,30 @@ const Preview = () => {
     //states & ref's
     const userVideo = useRef()
     const [stream, setStream] = useState();
-
     const history = useHistory();
+    const [roomId, setroomId] = useState('');
+
+    
 
     //initial mounting
     useEffect(() => {
+        
         navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
             setStream(stream);
             if (userVideo.current) {
                 userVideo.current.srcObject = stream;
             }
         })
-    }, []);
+
+
+        Axios.get('http://localhost:5000/join').then( res => {
+            setroomId(res.data.link)
+            const inputLink = document.getElementById('input-with-icon-adornment text')    
+            inputLink.value = res.data.link
+        } )
+        .catch( (err) => console.log(err) )
+
+    }, []); // passing location here ALERT
 
     
     let UserVideo;
@@ -50,14 +61,15 @@ const Preview = () => {
 
     //handle button join
     const handleJoin = () => {
-        Axios.get('http://localhost:5000/join').then( (response) => {
-            history.push({
-                pathname : '/meeting',
-                state : {
-                    roomId : response.data.link,
-                }
-            })
-        } )
+
+        const newPath = '/meeting/' + roomId
+
+        history.push({
+            pathname : newPath,
+            state : {
+                roomId : roomId,
+            }
+        })
     } 
 
     return (
@@ -81,12 +93,12 @@ const Preview = () => {
                 <div className='join'>
                     <Input
                         className='input'
-                        value='Some text to copy'
+                        placeholder='Some text to copy'
                         label="Filled" variant="filled"
                         id="input-with-icon-adornment text"
                         endAdornment={
                             <InputAdornment position="end" >
-                                <IconButton>
+                                <IconButton onClick = {() => {navigator.clipboard.writeText(roomId)} } >
                                     <IoCopySharp />
                                 </IconButton>
                             </InputAdornment>

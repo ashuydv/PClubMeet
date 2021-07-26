@@ -15,6 +15,7 @@ const newMeeting = require("./routes/newMeeting");
 
 const peerServer = ExpressPeerServer(server, {
     debug: true,
+    path: '/myapp'
 });
 
 app.use("/peerjs", peerServer);

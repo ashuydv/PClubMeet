@@ -6,8 +6,12 @@ import { AiOutlineArrowRight } from 'react-icons/ai'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import {RiAddBoxLine} from 'react-icons/ri'
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
+
+    const history = useHistory();
+
     return (
         <div>
             <div className="home">
@@ -30,7 +34,7 @@ const Home = () => {
                     <p>or</p>
                     <div className='line-1'></div>
                 </div>
-                <Button fullWidth={true} className='btn-meet'>
+                <Button  onClick = { () => {  history.push( { pathname : '/preview'}) } } fullWidth={true} className='btn-meet'>
                     <InputAdornment>
                             <RiAddBoxLine className='btn-icon'  />
                     </InputAdornment>

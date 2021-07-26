@@ -7,20 +7,10 @@ import Meetend from './components/Meetend/Meetend';
 import Meeting from './components/Meeting/Meeting';
 import Preview from './components/Preview/Preview';
 import Home from './components/Home/Home'
-import Axios from 'axios'
 
 
 const App = () => {
-  Axios({
-    method: 'GET',
-    url: "http://localhost:5000/",
-    headers: {
-      "Content-Type" : "application/json"
-    }
-  }).then(res => {
-    console.log(res.data.message)
-  })
-
+  
   return (
     <div>
       <Header/>
@@ -31,7 +21,7 @@ const App = () => {
           <Route path='/signup' exact component={Signup} />
           <Route path='/meetend' exact component={Meetend} />
           <Route path='/home' exact component={Home} />
-          <Route path='/meeting' exact component={Meeting} />
+          <Route path='/meeting/:roomId' exact component={Meeting} />
           <Route path='/preview' exact component={Preview} />
         </Switch>
       </Router>
