@@ -5,10 +5,8 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, { cors: { origin: '*' } });
 const { ExpressPeerServer } = require("peer");
-const peerServer = ExpressPeerServer(server, { debug: true, });
 
 const newMeeting = require("./routes/newMeeting");
-
 
 const peerServer = ExpressPeerServer(server, {
     debug: true,
