@@ -7,13 +7,56 @@ import Meetend from './components/Meetend/Meetend';
 import Meeting from './components/Meeting/Meeting';
 import Preview from './components/Preview/Preview';
 import Home from './components/Home/Home'
+import {auth,createUserProfileDocument, } from './firebase/firebase.utils';
 
+class App extends React.Component{
+  constructor(){
+    super();
+    this.state={
+      currentUser:null
+    }
+  }
+  unsubscribeFromAuth = null
+  componentDidMount(){
+    this.unsubscribeFromAuth=auth.onAuthStateChanged(async userAuth=>{
+    
+      //this.setState({currentUser:user});
+      //console.log(user);
+     // createUserProfileDocument(user);
+     if(userAuth){ 
+      const userRef=await createUserProfileDocument(userAuth);
+     
 
-const App = () => {
+       userRef.onSnapshot(onSnapshot=>{
+  
+        this.setState({
+          currentUser:{
+            id:onSnapshot.id,
+            ...onSnapshot.data()
+
+          }
+        });
+     console.log(this.state);
+       
+       });
+
+     }
+     else{
+      this.setState({currentUser:userAuth}) ;
+     }
+
+    
+    });
+  }
+
+  componentWillUnmount(){
+    this.unsubscribeFromAuth();
+  }
+  render(){
   
   return (
     <div>
-      <Header/>
+      <Header currentUser={this.state.currentUser}/>
       <Router>
         <Switch>
           <Route path='/' exact component={Signin} />
@@ -27,6 +70,7 @@ const App = () => {
       </Router>
     </div>
   );
+  }
 }
 
 export default App;

@@ -7,15 +7,23 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
 import {RiAddBoxLine} from 'react-icons/ri'
 import { useHistory } from 'react-router-dom';
+import firebase from 'firebase';
 
 const Home = () => {
 
+   
     const history = useHistory();
-
-    return (
+    var user = firebase.auth().currentUser;
+    var name,email,photoURL;
+    if(user!=null)
+{
+name=user.displayName.split(' ')[0];
+email=user.email;
+photoURL=user.photoURL;
+}    return (
         <div>
             <div className="home">
-                <h4>Welcome, Ashutosh Yadav</h4>
+                <h4>Welcome {name}!</h4>
                 <TextField
                     placeholder='Enter meeting code'
                     id="outlined-start-adornment"
