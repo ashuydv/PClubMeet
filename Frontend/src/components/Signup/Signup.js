@@ -10,15 +10,56 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import './Signup.css'
 import '../Login/Signin.css'
 import '../Login/Signin'
-
-const Signup = () => {
+import { auth,createUserProfileDocument } from '../../firebase/firebase.utils';
+class Signup extends React.Component{
+constructor(){
+    super();
+    this.state={
+        displayName:'',
+        email:'',
+        password:'',
+        confirmPassword:'',
+    }
+}
+handleSubmit=async event=>{
+    event.preventDefault();
+    const {displayName,email,password,confirmPassword}=this.state;
+    if(password !== confirmPassword){
+        alert("password don't match");
+        return;
+    }
+    try {
+        const {user}=await auth.createUserWithEmailAndPassword(email,password);
+        createUserProfileDocument(user,{displayName});
+        this.setState({
+            displayName:'',
+            email:'',
+            password:'',
+            confirmPassword:'',
+        })
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+};
+handleChange=event=>{
+    const {name,value}=event.target;
+    this.setState({[name]:value});
+};
+render(){
+    const {displayName,email,password,confirmPassword}=this.state;
     return (
         <div className="signup-card">
-            <FormControl className='form' autoComplete="off">
+            <FormControl className='form' onSubmit={this.handleSubmit} autoComplete="off">
                 <h1>Sign Up</h1>
+                <form  onSubmit={this.handleSubmit}>
                 <Input
                     required
                     className='input'
+                    name='displayName'
+                    value={displayName}
+                    onChange={this.handleChange}
                     placeholder='Full name'
                     label="Filled" variant="filled"
                     id="input-with-icon-adornment"
@@ -30,7 +71,10 @@ const Signup = () => {
                 />
                 <Input
                     className='input'
-                    placeholder='Username'
+                    name='email'
+                    value={email}
+                    onChange={this.handleChange}
+                    placeholder='Email'
                     label="Filled" variant="filled"
                     id="input-with-icon-adornment"
                     startAdornment={
@@ -41,7 +85,10 @@ const Signup = () => {
                 />
                 <Input
                     className='input'
-                    placeholder='Create Username'
+                    placeholder='Password'
+                    name='password'
+                    value={password}
+                    onChange={this.handleChange}
                     label="Filled" variant="filled"
                     id="input-with-icon-adornment"
                     startAdornment={
@@ -53,7 +100,10 @@ const Signup = () => {
 
                 <Input
                     className='input'
-                    placeholder='Create Password'
+                    name='confirmPassword'
+                    value={confirmPassword}
+                    onChange={this.handleChange}
+                    placeholder='Confirm Password'
                     label="Filled" variant="filled"
                     id="input-with-icon-adornment"
                     startAdornment={
@@ -62,7 +112,8 @@ const Signup = () => {
                         </InputAdornment>
                     }
                 />
-                <Button variant="contained" className='btn'>Signup</Button>
+                <Button variant="contained" type='submit'className='btn'>Signup</Button>
+                </form>
                 <p className='signup'>Already have an account, {" "}
                     <a
                         className='text-success'
@@ -71,6 +122,7 @@ const Signup = () => {
             </FormControl>
         </div>
     );
+}
 }
 
 export default Signup;
