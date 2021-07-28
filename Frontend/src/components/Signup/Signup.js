@@ -11,6 +11,7 @@ import './Signup.css'
 import '../Login/Signin.css'
 import '../Login/Signin'
 import { auth,createUserProfileDocument } from '../../firebase/firebase.utils';
+import { withRouter } from 'react-router-dom';
 class Signup extends React.Component{
 constructor(){
     super();
@@ -23,6 +24,7 @@ constructor(){
 }
 handleSubmit=async event=>{
     event.preventDefault();
+    const { history } = this.props;
     const {displayName,email,password,confirmPassword}=this.state;
     if(password !== confirmPassword){
         alert("password don't match");
@@ -37,6 +39,7 @@ handleSubmit=async event=>{
             password:'',
             confirmPassword:'',
         })
+        history.push('/home');
     }
     catch(error)
     {
@@ -125,4 +128,4 @@ render(){
 }
 }
 
-export default Signup;
+export default withRouter( Signup);

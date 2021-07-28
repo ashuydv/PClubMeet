@@ -5,9 +5,14 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import PersonIcon from '@material-ui/icons/Person';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Button from '@material-ui/core/Button'
-import { useHistory } from "react-router-dom";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import './Signin.css'
-import { auth,signInWithGoogle } from '../../firebase/firebase.utils';
+import firebase from 'firebase';
+import { useHistory } from 'react-router';
+import { auth } from '../../firebase/firebase.utils';
+import { withRouter } from 'react-router-dom';
+
+
 
 class Signin extends React.Component  {
     constructor(props){
@@ -17,23 +22,52 @@ class Signin extends React.Component  {
         password:''
     };
 }
-handleSubmit= async event=>{
+
+ handleSubmit= async event=>{
+    const { history } = this.props;
     event.preventDefault();
   const {email,password}=this.state;
    try {
-       await auth.signInWithEmailAndPassword(email,password)
-      
-       this.setState({email:'',password:''});
+      await auth.signInWithEmailAndPassword(email,password)
+      var user = firebase.auth().currentUser;
+    console.log(user);
+      if(user!=null)
+      {
+       //this.setState({email:'',password:''});
+     history.push('/home');
+      }
+      else
+      {
+          history.push('/');
+      }
    } catch (error) {
        console.log(error);
    }
    
 };
+
+
+
+
+
 handleChange=event=>{
     const {name,value}=event.target;
     this.setState({[name]:value});
 };
  render(){
+    const { history } = this.props;
+    var uiConfig = {
+        signInFlow: "popup",
+        signInSuccessUrl: '/home',
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+
+            firebase.auth.GithubAuthProvider.PROVIDER_ID
+        ],
+        tosUrl: '<your-tos-url>',
+        // Privacy policy url.
+        privacyPolicyUrl: '<your-privacy-policy-url>'
+    };
     const {email,password}=this.state;
     return (
         <div>
@@ -73,6 +107,7 @@ handleChange=event=>{
                                 placeholder='Password'
                                 name='password'
                                // value={this.state.password}
+                               value={password}
                                 onChange={this.handleChange}
                                // value={password}
                                 label="Filled" variant="filled"
@@ -85,7 +120,7 @@ handleChange=event=>{
                             />
                             <Button variant="contained" type='submit'className='btn'>Login</Button>
                             
-                            <Button onClick={signInWithGoogle} className="btn">Signin with google</Button>
+                            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
                             <p className='signup'>Don't have an account, {" "}
                                 <a
                                 className='text-success'
@@ -100,4 +135,4 @@ handleChange=event=>{
 }
 }
 
-export default Signin;
+export default withRouter( Signin);
