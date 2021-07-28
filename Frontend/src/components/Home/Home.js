@@ -8,22 +8,33 @@ import IconButton from '@material-ui/core/IconButton'
 import {RiAddBoxLine} from 'react-icons/ri'
 import { useHistory } from 'react-router-dom';
 import firebase from 'firebase';
-
 const Home = () => {
 
    
-    const history = useHistory();
+
+
     var user = firebase.auth().currentUser;
-    var name,email,photoURL;
-    if(user!=null)
-{
-name=user.displayName.split(' ')[0];
-email=user.email;
-photoURL=user.photoURL;
-}    return (
+    var fullname, email;
+    if (user !== null) {
+      
+        fullname=user.displayName;
+        email = user.email;
+      }
+
+    
+  
+
+
+const history = useHistory() ;
+         async function handleLogout () {
+            await firebase.auth().signOut();
+            history.push("/");
+            };
+            
+            return (
         <div>
             <div className="home">
-                <h4>Welcome {name}!</h4>
+                <h4>Welcome {fullname} !</h4>
                 <TextField
                     placeholder='Enter meeting code'
                     id="outlined-start-adornment"
@@ -42,12 +53,14 @@ photoURL=user.photoURL;
                     <p>or</p>
                     <div className='line-1'></div>
                 </div>
+                
                 <Button  onClick = { () => {  history.push( { pathname : '/preview'}) } } fullWidth={true} className='btn-meet'>
                     <InputAdornment>
                             <RiAddBoxLine className='btn-icon'  />
                     </InputAdornment>
                     New Meet
                 </Button>
+                <Button onClick={handleLogout} className='btn-meet'>Sign out</Button>
             </div>
         </div>
     );
