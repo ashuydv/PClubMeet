@@ -65,10 +65,7 @@ const Preview = () => {
         const newPath = '/meeting/' + roomId
 
         history.push({
-            pathname : newPath,
-            state : {
-                roomId : roomId,
-            }
+            pathname : newPath
         })
     } 
 
