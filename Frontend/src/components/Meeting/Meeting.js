@@ -6,6 +6,7 @@ import { io } from 'socket.io-client';
 const Meeting = (props) => {
     //states
     const [peers, setPeers] = useState({})
+    const [myId, setMyId] = useState('');
 
     //setting up my video
     const videoGrid = useRef();
@@ -38,6 +39,7 @@ const Meeting = (props) => {
     const initializePeerEvents = (myPeer,socket) => {
         
         myPeer.on('open', id => {
+            setMyId(id);
             socket.emit('join-room', props.match.params.roomId, id)
         })
 
@@ -99,11 +101,13 @@ const Meeting = (props) => {
             })
 
             socket.on('user-connected', userId => {
-                // user is joining
-                setTimeout(() => {
-                  // user joined
-                  connectToNewUser(userId, stream, myPeer)
-                }, 1000)
+                if( userId != myId ){
+                    // user is joining
+                    setTimeout(() => {
+                        // user joined
+                        connectToNewUser(userId, stream, myPeer)
+                    }, 1000)
+                }
             });
 
         })
