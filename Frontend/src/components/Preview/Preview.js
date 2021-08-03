@@ -13,36 +13,38 @@ import Button from '@material-ui/core/Button'
 import styled from "styled-components";
 import Axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import firebase from 'firebase';
 
-
-const Video = styled.video`
-  border: 2px solid #37AF4B;
-  width: 100%;
-  height: 100%;
-`;
 
 
 const Preview = () => {
+
     //states & ref's
-    const userVideo = useRef()
-    const [stream, setStream] = useState();
     const history = useHistory();
     const [roomId, setroomId] = useState('');
+    const myVideo = useRef()
+ 
 
-    
-
+    //firebase
+    var user = firebase.auth().currentUser;
+    if(user===null)
+    {
+      history.push('/');
+    }
     //initial mounting
     useEffect(() => {
         
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-            setStream(stream);
-            if (userVideo.current) {
-                userVideo.current.srcObject = stream;
+        navigator.mediaDevices.getUserMedia({ 
+            video: true, 
+            audio: true
+         }).then(stream => {
+            if( myVideo.current ){
+                myVideo.current.srcObject = stream
             }
         })
 
 
-        Axios.get('http://localhost:5000/join').then( res => {
+        Axios.get('https://pclub-meet-backend.herokuapp.com/join').then( res => {
             setroomId(res.data.link)
             const inputLink = document.getElementById('input-with-icon-adornment text')    
             inputLink.value = res.data.link
@@ -52,12 +54,6 @@ const Preview = () => {
     }, []); // passing location here ALERT
 
     
-    let UserVideo;
-    if (stream) {
-        UserVideo = (
-            <Video playsInline muted ref={userVideo} autoPlay />
-        );
-    }
 
     //handle button join
     const handleJoin = () => {
@@ -75,7 +71,7 @@ const Preview = () => {
                 <h1 className='heading'>Room #1</h1>
                 <Card className='card'>
                     <CardContent className='video'>
-                        {UserVideo}
+                        <video  autoPlay muted ref = {myVideo}/>
                     </CardContent>
                     <CardActions className='card-buttons'>
                         <IconButton size="medium" className='preview-icon'>
