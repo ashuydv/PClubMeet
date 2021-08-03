@@ -43,7 +43,7 @@ class Signin extends React.Component  {
    } catch (error) {
        console.log(error);
    }
-   
+
 };
 
 
@@ -90,7 +90,7 @@ handleChange=event=>{
                                 placeholder='Email'
                                 name='email'
                              type="email"
-                               
+
                                    onChange={this.handleChange}
                                     value={email}
                                 label="Filled" variant="filled"
@@ -105,6 +105,7 @@ handleChange=event=>{
                             required
                                 className='input'
                                 placeholder='Password'
+                                type='password'
                                 name='password'
                                // value={this.state.password}
                                value={password}
@@ -119,7 +120,7 @@ handleChange=event=>{
                                 }
                             />
                             <Button variant="contained" type='submit'className='btn'>Login</Button>
-                            
+
                             <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
                             <p className='signup'>Don't have an account, {" "}
                                 <a

@@ -90,19 +90,21 @@ render(){
                     className='input'
                     placeholder='Password'
                     name='password'
+                    type='password'
                     value={password}
                     onChange={this.handleChange}
                     label="Filled" variant="filled"
                     id="input-with-icon-adornment"
                     startAdornment={
                         <InputAdornment position="start" className='icons'>
-                            <AccountCircleIcon/>
+                            <VpnKeyIcon/>
                         </InputAdornment>
                     }
                 />
 
                 <Input
                     className='input'
+                    type='password'
                     name='confirmPassword'
                     value={confirmPassword}
                     onChange={this.handleChange}

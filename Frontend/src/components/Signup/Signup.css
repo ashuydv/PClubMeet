@@ -30,9 +30,8 @@
     padding: 1rem 2rem;
 }
 
-.signup-card .input {
-    width: 100%;
-    margin: 1rem 2rem;
+.input {
+    width: auto;
 }
 
 .signup-card .btn {

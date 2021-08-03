@@ -8,29 +8,21 @@ import IconButton from '@material-ui/core/IconButton'
 import {RiAddBoxLine} from 'react-icons/ri'
 import { useHistory } from 'react-router-dom';
 import firebase from 'firebase';
+
 const Home = () => {
-
-   
-
-
     var user = firebase.auth().currentUser;
     var fullname, email;
     if (user !== null) {
-      
         fullname=user.displayName;
         email = user.email;
       }
-
-    
-  
-
 
 const history = useHistory() ;
          async function handleLogout () {
             await firebase.auth().signOut();
             history.push("/");
             };
-            
+
             return (
         <div>
             <div className="home">
@@ -53,7 +45,7 @@ const history = useHistory() ;
                     <p>or</p>
                     <div className='line-1'></div>
                 </div>
-                
+
                 <Button  onClick = { () => {  history.push( { pathname : '/preview'}) } } fullWidth={true} className='btn-meet'>
                     <InputAdornment>
                             <RiAddBoxLine className='btn-icon'  />
